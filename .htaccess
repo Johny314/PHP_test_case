@@ -1,0 +1,14 @@
+php_value session.gc_maxlifetime 86400
+php_value session.cookie_lifetime 86400
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !index.php
+
+  ErrorDocument 404 /404/
+  RewriteRule ^404$ /404.php
+  ## Хедер
+  RewriteRule ^all$ /all_messages.php
+  RewriteRule ^about$ /about.php
+</IfModule>
