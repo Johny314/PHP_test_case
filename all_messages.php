@@ -131,16 +131,17 @@ global $mysqli;
                     messagesContainer.innerHTML = "";
                     const table = document.createElement("table");
                     table.classList.add("table");
+                    table.classList.add("table-bordered");
                     const headerRow = createTableHeader();
                     table.appendChild(headerRow);
                     data.messages.forEach(message => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
-                        <td>${message.id}</td>
-                        <td>${message.user_name}</td>
-                        <td>${message.email}</td>
-                        <td>${message.message_text}</td>
-                        <td>${message.date}</td>`;
+                        <td style="min-width: 140px;">${message.id}</td>
+                        <td style="min-width: 200px;">${message.user_name}</td>
+                        <td style="min-width: 200px;">${message.email}</td>
+                        <td style="min-width: 100px;">${message.message_text}</td>
+                        <td style="min-width: 200px;">${message.date}</td>`;
                         table.appendChild(row);
                     });
                     messagesContainer.appendChild(table);
