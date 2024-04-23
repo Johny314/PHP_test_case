@@ -58,6 +58,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        const btn = document.getElementById('1');
+        btn.classList.add('active');
         const form = document.querySelector('.needs-validation');
         const successMessage = document.querySelector('.success-message');
         const countdownMessage = document.querySelector('.countdown-message');

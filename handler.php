@@ -49,14 +49,20 @@ if(isset($_POST['event'])){
             break;
         }
         case 'all_messages':{
-            $sort = $_POST['sort'];
-            $order = $_POST['order'];
-            $query = "SELECT * FROM messages ORDER BY $sort $order";
+            $sort = $mysqli->real_escape_string($_POST['sort']);
+            $order = $_POST['order'] === 'asc' ? 'ASC' : 'DESC'; // Ensure only valid sort order is used
+
+            $perPage = isset($_POST['perPage']) ? (int)$_POST['perPage'] : 5;
+            $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+
+            $offset = ($page - 1) * $perPage;
+
+            $query = "SELECT * FROM messages ORDER BY $sort $order LIMIT $perPage OFFSET $offset";
             $stmt = $mysqli->prepare($query);
             if($stmt->execute()){
                 $result = $stmt->get_result();
                 while ($row = $result->fetch_assoc()) {
-                    $response[] = $row;
+                    $response['messages'][] = $row;
                 }
             }else{
                 // Произошла ошибка
@@ -64,6 +70,22 @@ if(isset($_POST['event'])){
                 $error = array("success" => false, "message" => $mysqli->error , 'date' => $current_date);
                 file_put_contents($file, json_encode($error), FILE_APPEND);
             }
+
+            $queryTotal = "SELECT COUNT(*) as total FROM messages";
+            $totalStmt = $mysqli->prepare($queryTotal);
+
+            if ($totalStmt->execute()) {
+                $totalResult = $totalStmt->get_result();
+                $totalCountRow = $totalResult->fetch_assoc();
+                $response['totalMessages'] = $totalCountRow['total'];
+            } else {
+                // Handle error
+                $current_date = date('Y-m-d H:i:s');
+                $error = array("success" => false, "message" => $mysqli->error, 'date' => $current_date);
+                file_put_contents($file, json_encode($error), FILE_APPEND);
+            }
+
+
             break;
         }
     }
